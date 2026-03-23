@@ -1,0 +1,94 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono); */
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #3a3a3a;
+  }
+}
+
+body {
+  background: #f8f8f8;
+  color: var(--foreground);
+  font-family: 'Inter', sans-serif;
+}
+
+#__next-route-announcer {
+  display: none;
+}
+
+h1 {
+  font-family: 'Inter', sans-serif;
+}
+
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  background-color: #003366;
+}
+
+canvas {
+  border-radius: 5px;
+  border: 1px solid #ccc
+}
+
+.download-now {
+  background-color: #d71920;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
+  color: #666 !important;
+  opacity: 1 !important;
+  /* Firefox aplica opacidad por defecto, hay que forzarla a 1 */
+}
+
+/* Internet Explorer 10-11 */
+:-ms-input-placeholder {
+  color: #666 !important;
+}
+
+/* Microsoft Edge */
+::-ms-input-placeholder {
+  color: #666 !important;
+}
+
+/* Placeholder más oscuro en modo light */
+@media (prefers-color-scheme: light) {
+  ::placeholder {
+    color: #333 !important;
+  }
+
+  :-ms-input-placeholder {
+    color: #333 !important;
+  }
+
+  ::-ms-input-placeholder {
+    color: #333 !important;
+  }
+}
