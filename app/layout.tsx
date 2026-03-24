@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "2026 Inspiring Leaders",
+  title: "2026 PGLC",
   description: "Celebrate 2026 PGLC with a personalized badge."
 };
 
