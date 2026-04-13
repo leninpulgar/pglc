@@ -235,7 +235,7 @@ export default function BadgeCreator() {
 
           // Añadir el nombre y título
           ctx.font = '26px sans-serif';
-          ctx.fillStyle = '#003366';
+          ctx.fillStyle = '#fff';
 
           // Ajustar el texto si es demasiado largo
           const maxWidth = 318;
