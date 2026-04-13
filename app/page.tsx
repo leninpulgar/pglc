@@ -7,7 +7,7 @@ export default function TemplateSelector() {
   const router = useRouter();
 
   const selectTemplate = (
-    route: "attending"
+    route: "attending" | "speaking"
   ) => {
     router.push(`/templates/${route}`);
   };
@@ -18,6 +18,9 @@ export default function TemplateSelector() {
       <div className="flex gap-4">
         <Button onClick={() => selectTemplate("attending")}>
           Attending Template
+        </Button>
+        <Button onClick={() => selectTemplate("speaking")}>
+          Speaking Template
         </Button>
       </div>
     </div>

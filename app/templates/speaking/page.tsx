@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/button';
 import { trackEvent } from '@/utils/analytics';
 
+
 export default function BadgeCreator() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [canvasWidth, setCanvasWidth] = useState(1200); // Default width
@@ -39,12 +40,12 @@ export default function BadgeCreator() {
     const preventGesture = (e: TouchEvent) => {
       if (e.touches.length > 1) e.preventDefault();
     };
-  
+
     // Add event listeners for non-standard gesture events
     document.addEventListener("gesturestart", preventGesture as EventListener, { passive: false });
     document.addEventListener("gesturechange", preventGesture as EventListener, { passive: false });
     document.addEventListener("touchmove", preventGesture as EventListener, { passive: false });
-  
+
     return () => {
       document.removeEventListener("gesturestart", preventGesture as EventListener);
       document.removeEventListener("gesturechange", preventGesture as EventListener);
@@ -111,14 +112,14 @@ export default function BadgeCreator() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-  
+
     const wheelHandler = (e: WheelEvent) => {
       if (e.cancelable) e.preventDefault();
     };
-  
+
     // 🔐 Register wheel as non-passive to allow preventDefault()
     canvas.addEventListener('wheel', wheelHandler, { passive: false });
-  
+
     return () => {
       canvas.removeEventListener('wheel', wheelHandler);
     };
@@ -130,14 +131,14 @@ export default function BadgeCreator() {
     const scaleAmount = e.deltaY < 0 ? 0.05 : -0.05;
     setImageScale((prev) => Math.max(0.1, prev + scaleAmount));
   };
-  
+
 
 
   const handleResize = () => {
     const screenWidth = window.innerWidth;
     const maxWidth = 1200;
     const aspectRatio = 1200 / 627;
-  
+
     if (screenWidth < maxWidth) {
       setCanvasWidth(screenWidth - 20);
       setCanvasHeight((screenWidth - 20) / aspectRatio);
@@ -146,7 +147,7 @@ export default function BadgeCreator() {
       setCanvasHeight(maxWidth / aspectRatio);
     }
   };
-  
+
 
   useEffect(() => {
     handleResize(); // Set initial size
@@ -169,7 +170,7 @@ export default function BadgeCreator() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-  
+
     const dpr = window.devicePixelRatio || 1;
     canvas.width = 1200 * dpr;
     canvas.height = 627 * dpr;
@@ -178,27 +179,27 @@ export default function BadgeCreator() {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(dpr, dpr);
     ctx.clearRect(0, 0, 627, 1200);
-  
+
     const background = new Image();
-    background.src = '/AONL2026_Speaking.png';
+    background.src = '/im-speaking.png';
     background.onload = () => {
       ctx.drawImage(background, 0, 0, 1200, 627);
-  
+
       if (profileImage) {
         const profile = new Image();
         profile.src = profileImage;
         profile.onload = () => {
           // 🔵 Posición y tamaño del círculo de avatar
-          const circleX = 950; // centro horizontal (768/2)
+          const circleX = 980; // centro horizontal (768/2)
           const circleY = 300; // ajusta según tu plantilla
-          const radius = 190;
-  
+          const radius = 150;
+
           // Calcula dimensiones de la imagen cargada
           const imgRatio = profile.width / profile.height;
           const boxSize = radius * 2;
           let drawW = boxSize;
           let drawH = boxSize;
-  
+
           if (imgRatio > 1) {
             drawH = boxSize;
             drawW = boxSize * imgRatio;
@@ -206,35 +207,42 @@ export default function BadgeCreator() {
             drawW = boxSize;
             drawH = boxSize / imgRatio;
           }
-  
+
           const dx = circleX - drawW / 2 + imageOffset.x;
           const dy = circleY - drawH / 2 + imageOffset.y;
-  
+
           // 🔒 Clipping circular
           ctx.save();
           ctx.beginPath();
           ctx.arc(circleX, circleY, radius, 0, Math.PI * 2, true);
           ctx.clip();
-  
+
           // Dibuja imagen escalada dentro del clip
           ctx.drawImage(
             profile,
             0, 0, profile.width, profile.height,
             dx, dy, drawW * imageScale, drawH * imageScale
           );
-  
+
           ctx.restore(); // Libera el recorte
-          
+
+          // ⭕️ Dibuja el borde (stroke) de 2px alrededor del avatar
+          ctx.beginPath();
+          ctx.arc(circleX, circleY, radius, 0, Math.PI * 2, true);
+          ctx.lineWidth = 6;
+          ctx.strokeStyle = '#af018d'; // Puedes cambiar 'white' por el color que prefieras (ej. '#003366')
+          ctx.stroke();
+
           // Añadir el nombre y título
           ctx.font = '26px sans-serif';
-          ctx.fillStyle = 'white';
-          
+          ctx.fillStyle = '#003366';
+
           // Ajustar el texto si es demasiado largo
           const maxWidth = 318;
           const lines = [];
           let currentLine = '';
           const words = name.split(' ');
-          
+
           for (const word of words) {
             const testLine = currentLine + word + ' ';
             const { width } = ctx.measureText(testLine);
@@ -246,17 +254,17 @@ export default function BadgeCreator() {
             }
           }
           lines.push(currentLine);
-          
+
           // Dibujar cada línea del nombre centrada
           ctx.textAlign = 'center';
-          const centerX = 950; // Posición central para el texto
+          const centerX = 980; // Posición central para el texto
           lines.forEach((line, i) => {
-            ctx.fillText(line.trim(), centerX, 520 + i * 24);
+            ctx.fillText(line.trim(), centerX, 490 + i * 24);
           });
         };
       }
     };
-  };  
+  };
 
   useEffect(() => {
     drawCanvas();
@@ -299,7 +307,7 @@ export default function BadgeCreator() {
         onChange={(e) => setName(e.target.value)}
         onFocus={(e) => e.target.select()}
       />
-      
+
       <div className="relative border-[3px] border-gray-200 bg-white rounded-lg overflow-hidden shadow-md p-6">
         <canvas
           ref={canvasRef}
